@@ -2,14 +2,10 @@
 // Role of the component: Bulk upload products page for admin dashboard
 // Name of the component: BulkUpload.tsx
 // Developer: Aleksandar Kuzmanovic (modified)
-// Version: 1.0
-// Component call: <BulkUpload />
-// Input parameters: no input parameters
-// Output: bulk upload page for admin dashboard
+// Version: 2.0 - Cibaduyut Theme
 // *********************
 
 "use client";
-import { DashboardSidebar } from "@/components";
 import BulkUploadHistory from "@/components/BulkUploadHistory";
 import React, { useState, useRef } from "react";
 import toast from "react-hot-toast";
@@ -18,6 +14,8 @@ import {
   FaDownload,
   FaCheckCircle,
   FaTimesCircle,
+  FaCloudUploadAlt,
+  FaFileCsv
 } from "react-icons/fa";
 
 interface UploadResult {
@@ -62,7 +60,7 @@ const BulkUploadPage = () => {
         setFile(droppedFile);
         setUploadResult(null);
       } else {
-        toast.error("Please upload a CSV file");
+        toast.error("Mohon upload file CSV");
       }
     }
   };
@@ -77,14 +75,14 @@ const BulkUploadPage = () => {
         setFile(selectedFile);
         setUploadResult(null);
       } else {
-        toast.error("Please upload a CSV file");
+        toast.error("Mohon upload file CSV");
       }
     }
   };
 
   const handleUpload = async () => {
     if (!file) {
-      toast.error("Please select a CSV file first");
+      toast.error("Pilih file CSV terlebih dahulu");
       return;
     }
 
@@ -105,10 +103,10 @@ const BulkUploadPage = () => {
       if (response.ok) {
         setUploadResult({
           success: true,
-          message: data.message || "Products uploaded successfully!",
+          message: data.message || "Produk berhasil diupload!",
           details: data.details,
         });
-        toast.success("Bulk upload completed!");
+        toast.success("Bulk upload selesai!");
         setFile(null);
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
@@ -116,18 +114,18 @@ const BulkUploadPage = () => {
       } else {
         setUploadResult({
           success: false,
-          message: data.error || "Upload failed",
+          message: data.error || "Upload gagal",
           details: data.details,
         });
-        toast.error(data.error || "Upload failed");
+        toast.error(data.error || "Upload gagal");
       }
     } catch (error) {
       console.error("Upload error:", error);
       setUploadResult({
         success: false,
-        message: "Network error occurred during upload",
+        message: "Terjadi kesalahan jaringan",
       });
-      toast.error("Network error occurred");
+      toast.error("Terjadi kesalahan jaringan");
     } finally {
       setUploading(false);
     }
@@ -135,323 +133,267 @@ const BulkUploadPage = () => {
 
   const downloadTemplate = () => {
     const csvContent = `title,price,manufacturer,inStock,mainImage,description,slug,categoryId
-Sample Product,99.99,Sample Manufacturer,10,https://example.com/image.jpg,Sample description,sample-product,category-uuid
-Another Product,149.99,Another Manufacturer,5,https://example.com/image2.jpg,Another description,another-product,category-uuid`;
+Sepatu Kulit Formal Pria,750000,Cibaduyut Authentic,50,https://example.com/sepatu.jpg,Sepatu kulit asli kualitas premium,sepatu-kulit-formal,category-uuid
+Sandal Kulit Wanita,250000,Cibaduyut Authentic,30,https://example.com/sandal.jpg,Sandal santai bahan kulit asli,sandal-kulit-wanita,category-uuid`;
 
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "product-template.csv";
+    a.download = "template-produk-cibaduyut.csv";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
-    toast.success("Template downloaded!");
+    toast.success("Template berhasil didownload!");
   };
 
   return (
-    <div className="flex xl:flex-row flex-col justify-start items-start">
-      <DashboardSidebar />
-      <div className="w-full xl:p-14 p-4">
-        <h1 className="text-4xl font-bold mb-8">Bulk Upload Products</h1>
-
-        {/* Instructions */}
-        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
-          <h2 className="text-lg font-semibold mb-2 text-blue-800">
-            📋 Instructions
-          </h2>
-          <ul className="list-disc list-inside space-y-1 text-sm text-blue-700">
-            <li>Download the CSV template below</li>
-            <li>
-              Fill in your product data (title, price, manufacturer, stock,
-              image URL, description, slug, categoryId)
-            </li>
-            <li>Upload the completed CSV file</li>
-            <li>Maximum file size: 5MB</li>
-          </ul>
-        </div>
-
-        {/* Download Template Button */}
-        <div className="mb-6">
+    <div className="p-6 lg:p-8 bg-gray-50 min-h-screen">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="font-display text-3xl font-bold text-cibaduyut-brown-800">
+              Bulk Upload Produk
+            </h1>
+            <p className="text-cibaduyut-brown-500 mt-1">
+              Upload banyak produk sekaligus menggunakan file CSV
+            </p>
+          </div>
+          
           <button
             onClick={downloadTemplate}
-            className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-white text-cibaduyut-brown-600 border border-cibaduyut-brown-200 hover:bg-cibaduyut-brown-50 hover:border-cibaduyut-gold px-4 py-2 rounded-lg transition-all shadow-sm font-medium text-sm"
           >
-            <FaDownload /> Download CSV Template
+            <FaDownload /> Download Template CSV
           </button>
         </div>
 
-        {/* File Upload Area */}
-        <div className="mb-6">
-          <div
-            className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-              dragActive
-                ? "border-blue-500 bg-blue-50"
-                : "border-gray-300 bg-gray-50 hover:border-gray-400"
-            }`}
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
-          >
-            <FaFileUpload className="text-6xl text-gray-400 mx-auto mb-4" />
-            <p className="text-lg mb-2">
-              {file ? (
-                <span className="font-semibold text-blue-600">
-                  Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)
-                </span>
-              ) : (
-                "Drag and drop CSV file here, or click to select"
-              )}
-            </p>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".csv"
-              onChange={handleFileChange}
-              className="hidden"
-              id="file-upload"
-            />
-            <label
-              htmlFor="file-upload"
-              className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded cursor-pointer transition-colors"
-            >
-              Select CSV File
-            </label>
-          </div>
-        </div>
-
-        {/* Upload Button */}
-        {file && (
-          <div className="mb-6">
-            <button
-              onClick={handleUpload}
-              disabled={uploading}
-              className={`w-full py-4 px-6 rounded-lg font-bold text-white text-lg transition-colors ${
-                uploading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600"
-              }`}
-            >
-              {uploading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Uploading...
-                </span>
-              ) : (
-                "Upload Products"
-              )}
-            </button>
-          </div>
-        )}
-
-        {/* Upload Result */}
-        {uploadResult && (
-          <div
-            className={`border-l-4 p-6 rounded-lg ${
-              uploadResult.success
-                ? "bg-green-50 border-green-500"
-                : "bg-red-50 border-red-500"
-            }`}
-          >
-            <div className="flex items-start gap-3">
-              {uploadResult.success ? (
-                <FaCheckCircle className="text-3xl text-green-500 flex-shrink-0 mt-1" />
-              ) : (
-                <FaTimesCircle className="text-3xl text-red-500 flex-shrink-0 mt-1" />
-              )}
-              <div className="flex-1">
-                <h3
-                  className={`text-xl font-bold mb-2 ${
-                    uploadResult.success ? "text-green-800" : "text-red-800"
-                  }`}
-                >
-                  {uploadResult.success
-                    ? "✅ Upload Successful!"
-                    : "❌ Upload Failed"}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Upload Area */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Upload Box */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <div
+                className={`border-2 border-dashed rounded-xl p-10 text-center transition-all duration-300 ${
+                  dragActive
+                    ? "border-cibaduyut-gold bg-amber-50 shadow-leather"
+                    : "border-gray-200 bg-gray-50 hover:border-cibaduyut-brown-300 hover:bg-white"
+                }`}
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+              >
+                <div className="w-16 h-16 bg-cibaduyut-brown-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FaCloudUploadAlt className="text-3xl text-cibaduyut-brown-600" />
+                </div>
+                
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  {file ? "File Terpilih" : "Upload File CSV"}
                 </h3>
-                <p
-                  className={`mb-3 ${
-                    uploadResult.success ? "text-green-700" : "text-red-700"
-                  }`}
-                >
-                  {uploadResult.message}
+                
+                <p className="text-gray-500 mb-6 text-sm">
+                  {file ? (
+                    <span className="font-medium text-cibaduyut-brown-600 flex items-center justify-center gap-2">
+                      <FaFileCsv className="text-green-600" />
+                      {file.name} ({(file.size / 1024).toFixed(2)} KB)
+                    </span>
+                  ) : (
+                    "Drag & drop file CSV di sini, atau klik tombol di bawah"
+                  )}
                 </p>
+                
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="file-upload"
+                />
+                
+                <label
+                  htmlFor="file-upload"
+                  className="inline-flex items-center gap-2 bg-cibaduyut-brown-600 hover:bg-cibaduyut-brown-700 text-white font-medium py-2.5 px-6 rounded-lg cursor-pointer transition-colors"
+                >
+                  <FaFileUpload /> {file ? "Ganti File" : "Pilih File"}
+                </label>
+              </div>
 
-                {uploadResult.details && (
-                  <div className="bg-white rounded p-4 space-y-2">
-                    <p className="font-semibold">Upload Statistics:</p>
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="text-center">
-                        <p className="text-2xl font-bold text-blue-600">
-                          {uploadResult.details.processed}
-                        </p>
-                        <p className="text-sm text-gray-600">Processed</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-2xl font-bold text-green-600">
-                          {uploadResult.details.successful}
-                        </p>
-                        <p className="text-sm text-gray-600">Successful</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-2xl font-bold text-red-600">
-                          {uploadResult.details.failed}
-                        </p>
-                        <p className="text-sm text-gray-600">Failed</p>
-                      </div>
-                    </div>
+              {/* Upload Action */}
+              {file && (
+                <div className="mt-6">
+                  <button
+                    onClick={handleUpload}
+                    disabled={uploading}
+                    className={`w-full py-3.5 px-6 rounded-xl font-bold text-white text-lg transition-all shadow-md ${
+                      uploading
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-cibaduyut-gold to-amber-500 hover:shadow-lg hover:translate-y-[-2px]"
+                    }`}
+                  >
+                    {uploading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                        Mengupload...
+                      </span>
+                    ) : (
+                      "Proses Upload"
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
 
-                    {uploadResult.details.errors &&
-                      uploadResult.details.errors.length > 0 && (
-                        <div className="mt-4">
-                          <p className="font-semibold text-red-700 mb-2">
-                            Errors:
-                          </p>
-                          <ul className="list-disc list-inside space-y-1 text-sm text-red-600 max-h-40 overflow-y-auto">
-                            {uploadResult.details.errors.map((error, index) => (
-                              <li key={index}>{error}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+            {/* Upload Result */}
+            {uploadResult && (
+              <div
+                className={`border rounded-xl p-6 shadow-sm ${
+                  uploadResult.success
+                    ? "bg-green-50 border-green-200"
+                    : "bg-red-50 border-red-200"
+                }`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className={`p-2 rounded-full ${
+                    uploadResult.success ? "bg-green-100" : "bg-red-100"
+                  }`}>
+                    {uploadResult.success ? (
+                      <FaCheckCircle className="text-xl text-green-600" />
+                    ) : (
+                      <FaTimesCircle className="text-xl text-red-600" />
+                    )}
                   </div>
-                )}
+                  
+                  <div className="flex-1">
+                    <h3 className={`text-lg font-bold mb-1 ${
+                      uploadResult.success ? "text-green-800" : "text-red-800"
+                    }`}>
+                      {uploadResult.success ? "Upload Berhasil" : "Upload Gagal"}
+                    </h3>
+                    <p className={`text-sm mb-4 ${
+                      uploadResult.success ? "text-green-700" : "text-red-700"
+                    }`}>
+                      {uploadResult.message}
+                    </p>
+
+                    {uploadResult.details && (
+                      <div className="bg-white/80 rounded-lg p-4 backdrop-blur-sm">
+                        <p className="font-semibold text-gray-700 mb-3 text-sm border-b pb-2">Detail Proses:</p>
+                        <div className="grid grid-cols-3 gap-4 mb-4">
+                          <div className="text-center p-2 bg-blue-50 rounded-lg">
+                            <p className="text-xl font-bold text-blue-600">
+                              {uploadResult.details.processed}
+                            </p>
+                            <p className="text-xs text-blue-600/70 uppercase font-medium">Diproses</p>
+                          </div>
+                          <div className="text-center p-2 bg-green-50 rounded-lg">
+                            <p className="text-xl font-bold text-green-600">
+                              {uploadResult.details.successful}
+                            </p>
+                            <p className="text-xs text-green-600/70 uppercase font-medium">Berhasil</p>
+                          </div>
+                          <div className="text-center p-2 bg-red-50 rounded-lg">
+                            <p className="text-xl font-bold text-red-600">
+                              {uploadResult.details.failed}
+                            </p>
+                            <p className="text-xs text-red-600/70 uppercase font-medium">Gagal</p>
+                          </div>
+                        </div>
+
+                        {uploadResult.details.errors && uploadResult.details.errors.length > 0 && (
+                          <div className="mt-2">
+                            <p className="font-semibold text-red-700 mb-2 text-xs uppercase">
+                              Daftar Error:
+                            </p>
+                            <ul className="list-disc list-inside space-y-1 text-xs text-red-600 max-h-32 overflow-y-auto bg-red-50 p-2 rounded border border-red-100">
+                              {uploadResult.details.errors.map((error, index) => (
+                                <li key={index}>{error}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div className="mt-8">
+              <h3 className="font-bold text-gray-800 mb-4">Riwayat Upload Terakhir</h3>
+              <BulkUploadHistory />
+            </div>
+          </div>
+
+          {/* Sidebar Info */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-lg font-bold text-cibaduyut-brown-800 mb-4 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-sm">📋</span>
+                Instruksi
+              </h2>
+              <ul className="space-y-3 text-sm text-gray-600">
+                <li className="flex gap-2">
+                  <span className="min-w-[20px] h-5 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">1</span>
+                  Download template CSV yang disediakan.
+                </li>
+                <li className="flex gap-2">
+                  <span className="min-w-[20px] h-5 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">2</span>
+                  Isi data produk sesuai kolom yang tersedia (title, price, dll).
+                </li>
+                <li className="flex gap-2">
+                  <span className="min-w-[20px] h-5 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">3</span>
+                  Pastikan format data benar (comma-separated).
+                </li>
+                <li className="flex gap-2">
+                  <span className="min-w-[20px] h-5 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">4</span>
+                  Upload file CSV yang telah diisi.
+                </li>
+                <li className="flex gap-2">
+                  <span className="min-w-[20px] h-5 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">5</span>
+                  Tunggu proses validasi dan upload selesai.
+                </li>
+              </ul>
+              <div className="mt-4 pt-4 border-t text-xs text-gray-500 text-center">
+                Maksimal ukuran file: 5MB
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-lg font-bold text-cibaduyut-brown-800 mb-4">
+                Panduan Kolom CSV
+              </h2>
+              <div className="space-y-4">
+                {[
+                  { col: 'title', req: true, desc: 'Nama produk (Text)' },
+                  { col: 'price', req: true, desc: 'Harga (Angka)' },
+                  { col: 'manufacturer', req: true, desc: 'Merk/Pembuat (Text)' },
+                  { col: 'inStock', req: false, desc: 'Stok (Angka, Default: 0)' },
+                  { col: 'mainImage', req: false, desc: 'URL Gambar (Link)' },
+                  { col: 'description', req: true, desc: 'Deskripsi (Text)' },
+                  { col: 'slug', req: true, desc: 'ID URL unik (Text)' },
+                  { col: 'categoryId', req: true, desc: 'ID Kategori (UUID)' },
+                ].map((field, idx) => (
+                  <div key={idx} className="flex items-start justify-between text-sm pb-2 border-b border-gray-50 last:border-0 last:pb-0">
+                    <div>
+                      <p className="font-mono font-bold text-gray-700">{field.col}</p>
+                      <p className="text-gray-500 text-xs">{field.desc}</p>
+                    </div>
+                    <span className={`text-xs px-2 py-0.5 rounded ${
+                      field.req ? 'bg-red-50 text-red-600' : 'bg-gray-100 text-gray-500'
+                    }`}>
+                      {field.req ? 'Wajib' : 'Opsional'}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        )}
-
-        {/* CSV Format Guide */}
-        <div className="mt-8 bg-gray-50 rounded-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">📝 CSV Format Guide</h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-300 text-sm">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border border-gray-300 px-4 py-2 text-left">
-                    Column
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">
-                    Required
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">
-                    Type
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">
-                    Description
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-mono">
-                    title
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">✅ Yes</td>
-                  <td className="border border-gray-300 px-4 py-2">String</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    Product name
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-mono">
-                    price
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">✅ Yes</td>
-                  <td className="border border-gray-300 px-4 py-2">Number</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    Product price (e.g., 99.99)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-mono">
-                    manufacturer
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">✅ Yes</td>
-                  <td className="border border-gray-300 px-4 py-2">String</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    Manufacturer/Brand name
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-mono">
-                    inStock
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">❌ No</td>
-                  <td className="border border-gray-300 px-4 py-2">Number</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    Stock quantity (default: 0)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-mono">
-                    mainImage
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">❌ No</td>
-                  <td className="border border-gray-300 px-4 py-2">URL</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    Product image URL
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-mono">
-                    description
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">✅ Yes</td>
-                  <td className="border border-gray-300 px-4 py-2">String</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    Product description
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-mono">
-                    slug
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">✅ Yes</td>
-                  <td className="border border-gray-300 px-4 py-2">String</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    URL-friendly identifier
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-mono">
-                    categoryId
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">✅ Yes</td>
-                  <td className="border border-gray-300 px-4 py-2">UUID</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    Category ID from database
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Upload History */}
-        <div className="mt-8">
-          <BulkUploadHistory />
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-
 import {
   SectionTitle
 } from "@/components";
@@ -8,17 +7,18 @@ import { Suspense } from "react";
 
 const CartPage = () => {
   return (
-    <div className="bg-white">
-      <SectionTitle title="Cart Page" path="Home | Cart" />
-      <div className="bg-white">
-        <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Shopping Cart
-          </h1>
-          <Suspense fallback={<Loader />}>
-            <CartModule />
-          </Suspense>
+    <div className="bg-gray-50 min-h-screen">
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-screen-xl mx-auto px-6 py-8">
+          <h1 className="text-2xl font-bold text-gray-800">Keranjang Belanja</h1>
+          <p className="text-gray-500 text-sm mt-1">Beranda / Keranjang</p>
         </div>
+      </div>
+      
+      <div className="max-w-screen-xl mx-auto px-6 py-8">
+        <Suspense fallback={<Loader />}>
+          <CartModule />
+        </Suspense>
       </div>
     </div>
   );

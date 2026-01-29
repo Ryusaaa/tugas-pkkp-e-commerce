@@ -1,20 +1,18 @@
 // *********************
-// Role of the component: Section title that can be used on any page
+// Role of the component: Section title - Cibaduyut
 // Name of the component: SectionTitle.tsx
-// Developer: Aleksandar Kuzmanovic
-// Version: 1.0
-// Component call: <SectionTitle />
-// Input parameters: {title: string; path: string}
-// Output: div containing h1 for page title and p for page location path 
+// Version: 2.0
 // *********************
 
 import React from 'react'
 
 const SectionTitle = ({title, path} : {title: string; path: string}) => {
   return (
-    <div className='h-[250px] border-b pt-16 border-white bg-blue-500 mb-2 max-sm:h-[200px] max-sm:pt-16'>
-        <h1 className='section-title-title text-7xl text-center mb-7 max-md:text-7xl max-sm:text-5xl text-white max-sm:mb-2'>{ title }</h1>
-        <p className='section-title-path text-xl text-center max-sm:text-xl text-white'>{ path }</p>
+    <div className='py-12 bg-gradient-to-r from-amber-50 to-orange-50 border-b border-gray-100'>
+      <div className='max-w-screen-2xl mx-auto px-6'>
+        <h1 className='text-3xl md:text-4xl font-bold text-gray-800 mb-2'>{title}</h1>
+        <p className='text-gray-500 text-sm'>{path}</p>
+      </div>
     </div>
   )
 }

@@ -1,36 +1,36 @@
 // *********************
-// Role of the component: Pagination for navigating the shop page
+// Role of the component: Pagination - Cibaduyut
 // Name of the component: Pagination.tsx
-// Developer: Aleksandar Kuzmanovic
-// Version: 1.0
-// Component call: <Pagination />
-// Input parameters: no input parameters
-// Output: Component with the current page and buttons for incrementing and decrementing page
+// Version: 2.0
 // *********************
 
 "use client";
 import { usePaginationStore } from "@/app/_zustand/paginationStore";
 import React from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Pagination = () => {
-  // getting from Zustand store current page and methods for incrementing and decrementing current page
   const { page, incrementPage, decrementPage } = usePaginationStore();
+  
   return (
-    <div className="join flex justify-center py-16">
+    <div className="flex justify-center items-center gap-2 py-10">
       <button
-        className="join-item btn btn-lg bg-blue-500 text-white hover:bg-white hover:text-blue-500"
+        className="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={() => decrementPage()}
+        disabled={page <= 1}
       >
-        «
+        <FaChevronLeft className="text-sm" />
       </button>
-      <button className="join-item btn btn-lg bg-blue-500 text-white hover:bg-white hover:text-blue-500">
-        Page {page}
-      </button>
+      
+      <div className="px-5 py-2 bg-amber-600 text-white rounded-lg font-medium">
+        Halaman {page}
+      </div>
+      
       <button
-        className="join-item btn btn-lg bg-blue-500 text-white hover:bg-white hover:text-blue-500"
+        className="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition-colors"
         onClick={() => incrementPage()}
       >
-        »
+        <FaChevronRight className="text-sm" />
       </button>
     </div>
   );

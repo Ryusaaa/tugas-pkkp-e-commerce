@@ -1,18 +1,18 @@
 "use client";
-import { CustomButton, SectionTitle } from "@/components";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 
 const RegisterPage = () => {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
 
   useEffect(() => {
-    // chechking if user has already registered redirect to home page
     if (sessionStatus === "authenticated") {
       router.replace("/");
     }
@@ -25,30 +25,33 @@ const RegisterPage = () => {
   
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setIsLoading(true);
     const email = e.target[2].value;
     const password = e.target[3].value;
     const confirmPassword = e.target[4].value;
 
     if (!isValidEmail(email)) {
-      setError("Email is invalid");
-      toast.error("Email is invalid");
+      setError("Format email tidak valid");
+      toast.error("Format email tidak valid");
+      setIsLoading(false);
       return;
     }
 
     if (!password || password.length < 8) {
-      setError("Password must be 8 characters long");
-      toast.error("Password must be 8 characters long");
+      setError("Password minimal 8 karakter");
+      toast.error("Password minimal 8 karakter");
+      setIsLoading(false);
       return;
     }
 
     if (confirmPassword !== password) {
-      setError("Passwords are not equal");
-      toast.error("Passwords are not equal");
+      setError("Password tidak sama");
+      toast.error("Password tidak sama");
+      setIsLoading(false);
       return;
     }
 
     try {
-      // sending API request for registering user
       const res = await fetch("/api/register", {
         method: "POST",
         headers: {
@@ -64,171 +67,199 @@ const RegisterPage = () => {
 
       if (res.ok) {
         setError("");
-        toast.success("Registration successful");
+        toast.success("Registrasi berhasil!");
         router.push("/login");
       } else {
-        // Handle different types of errors
         if (data.details && Array.isArray(data.details)) {
-          // Validation errors
           const errorMessage = data.details.map((err: any) => err.message).join(", ");
           setError(errorMessage);
           toast.error(errorMessage);
         } else if (data.error) {
-          // General errors
           setError(data.error);
           toast.error(data.error);
         } else {
-          setError("Registration failed");
-          toast.error("Registration failed");
+          setError("Registrasi gagal");
+          toast.error("Registrasi gagal");
         }
       }
     } catch (error) {
-      toast.error("Error, try again");
-      setError("Error, try again");
-      console.log(error);
+      toast.error("Error, coba lagi");
+      setError("Error, coba lagi");
     }
+    setIsLoading(false);
   };
 
   if (sessionStatus === "loading") {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+      </div>
+    );
   }
+  
   return (
-    <div className="bg-white">
-      <SectionTitle title="Register" path="Home | Register" />
-      <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8 bg-white">
-        <div className="flex justify-center flex-col items-center">
-          <h2 className="mt-6 text-center text-2xl leading-9 tracking-tight text-gray-900">
-            Sign up on our website
-          </h2>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+      <div className="flex min-h-screen">
+        {/* Left side - Branding */}
+        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-amber-700 via-amber-800 to-amber-900 p-12 flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <span className="text-white font-bold text-xl">C</span>
+              </div>
+              <div>
+                <h1 className="text-white font-bold text-xl">Cibaduyut</h1>
+                <p className="text-amber-200 text-sm">Authentic Leather</p>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Bergabung Bersama Kami
+            </h2>
+            <p className="text-amber-100 text-lg">
+              Daftar sekarang dan nikmati kemudahan berbelanja produk kulit asli berkualitas tinggi.
+            </p>
+          </div>
+          
+          <p className="text-amber-200 text-sm">
+            © 2026 Cibaduyut Authentic Leather
+          </p>
         </div>
-
-        <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-[480px]">
-          <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Name
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
+        
+        {/* Right side - Form */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+          <div className="w-full max-w-md">
+            {/* Mobile logo */}
+            <div className="lg:hidden text-center mb-8">
+              <div className="inline-flex items-center gap-3">
+                <div className="w-10 h-10 bg-amber-600 rounded-xl flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">C</span>
+                </div>
+                <div className="text-left">
+                  <h1 className="font-bold text-gray-800">Cibaduyut</h1>
+                  <p className="text-amber-600 text-xs">Authentic Leather</p>
                 </div>
               </div>
+            </div>
+            
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Daftar Akun</h2>
+            <p className="text-gray-500 mb-8">
+              Sudah punya akun?{" "}
+              <Link href="/login" className="text-amber-600 hover:text-amber-700 font-medium">
+                Masuk di sini
+              </Link>
+            </p>
 
-              <div>
-                <label
-                  htmlFor="lastname"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Lastname
-                </label>
-                <div className="mt-2">
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Nama Depan
+                  </label>
+                  <div className="relative">
+                    <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="John"
+                      required
+                      className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Nama Belakang
+                  </label>
                   <input
-                    id="lastname"
+                    type="text"
                     name="lastname"
-                    type="text"
+                    placeholder="Doe"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Email address
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email
                 </label>
-                <div className="mt-2">
+                <div className="relative">
+                  <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
-                    id="email"
-                    name="email"
                     type="email"
-                    autoComplete="email"
+                    name="email"
+                    placeholder="nama@email.com"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Password
                 </label>
-                <div className="mt-2">
+                <div className="relative">
+                  <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
-                    id="password"
+                    type="password"
                     name="password"
-                    type="password"
-                    autoComplete="current-password"
+                    placeholder="Minimal 8 karakter"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label
-                  htmlFor="confirmpassword"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Confirm password
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Konfirmasi Password
                 </label>
-                <div className="mt-2">
+                <div className="relative">
+                  <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
-                    id="confirmpassword"
-                    name="confirmpassword"
                     type="password"
-                    autoComplete="current-password"
+                    name="confirmpassword"
+                    placeholder="Ulangi password"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
-                  />
-                  <label
-                    htmlFor="remember-me"
-                    className="ml-3 block text-sm leading-6 text-gray-900"
-                  >
-                    Accept our terms and privacy policy
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <CustomButton
-                  buttonType="submit"
-                  text="Sign up"
-                  paddingX={3}
-                  paddingY={1.5}
-                  customWidth="full"
-                  textSize="sm"
+              <div className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  required
+                  className="w-4 h-4 mt-1 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
                 />
-
-                <p className="text-red-600 text-center text-[16px] my-4">
-                  {error && error}
-                </p>
+                <label htmlFor="terms" className="text-sm text-gray-600">
+                  Saya setuju dengan{" "}
+                  <a href="#" className="text-amber-600 hover:text-amber-700">Syarat & Ketentuan</a>
+                  {" "}dan{" "}
+                  <a href="#" className="text-amber-600 hover:text-amber-700">Kebijakan Privasi</a>
+                </label>
               </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? "Memproses..." : "Daftar Sekarang"}
+              </button>
             </form>
           </div>
         </div>

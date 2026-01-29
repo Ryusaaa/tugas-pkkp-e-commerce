@@ -1,35 +1,27 @@
 // *********************
-// Role of the component: Component that displays current page location in the application 
+// Role of the component: Breadcrumb - Cibaduyut
 // Name of the component: Breadcrumb.tsx
-// Developer: Aleksandar Kuzmanovic
-// Version: 1.0
-// Component call: <Breadcrumb />
-// Input parameters: No input parameters
-// Output: Page location in the application
+// Version: 2.0
 // *********************
 
 import Link from "next/link";
 import React from "react";
-import { FaHouse } from "react-icons/fa6";
+import { FaHome, FaChevronRight } from "react-icons/fa";
 
 const Breadcrumb = () => {
   return (
-    <div className="text-lg breadcrumbs pb-10 py-5 max-sm:text-base">
-      <ul>
-        <li>
-          <Link href="/">
-            <FaHouse className="mr-2" />
-            Home
-          </Link>
-        </li>
-        <li>
-          <Link href="/shop">Shop</Link>
-        </li>
-        <li>
-          <Link href="/shop">All products</Link>
-        </li>
-      </ul>
-    </div>
+    <nav className="flex items-center gap-2 text-sm text-gray-500 py-4">
+      <Link href="/" className="flex items-center gap-1 hover:text-amber-600 transition-colors">
+        <FaHome className="text-xs" />
+        <span>Beranda</span>
+      </Link>
+      <FaChevronRight className="text-xs text-gray-300" />
+      <Link href="/shop" className="hover:text-amber-600 transition-colors">
+        Toko
+      </Link>
+      <FaChevronRight className="text-xs text-gray-300" />
+      <span className="text-gray-700">Semua Produk</span>
+    </nav>
   );
 };
 

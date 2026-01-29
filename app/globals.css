@@ -1,25 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-.range{
-    --range-shdw: #3B82F6;
+/* Cibaduyut Authentic Leather - Design System */
+:root {
+  /* Primary Colors */
+  --cibaduyut-brown-50: #FAF5F0;
+  --cibaduyut-brown-100: #F5E6D3;
+  --cibaduyut-brown-200: #E8D0B8;
+  --cibaduyut-brown-300: #C4956A;
+  --cibaduyut-brown-400: #A67C52;
+  --cibaduyut-brown-500: #8B5A2B;
+  --cibaduyut-brown-600: #704A23;
+  --cibaduyut-brown-700: #5D3A1A;
+  --cibaduyut-brown-800: #4A2E15;
+  --cibaduyut-brown-900: #3D2314;
+  
+  /* Accent Colors */
+  --cibaduyut-gold: #D4A574;
+  --cibaduyut-cream: #FAF7F2;
+  --cibaduyut-warm-white: #FFFDF9;
+  --cibaduyut-dark: #1C1410;
 }
 
-.checkbox:checked, .checkbox[checked="true"], .checkbox[aria-checked="true"] {
-    background-repeat: no-repeat;
-    animation: checkmark var(--animation-input, 0.2s) ease-out;
-    background-color: #3B82F6;
-    background-image: linear-gradient(-45deg, transparent 65%, #3B82F6 65.99%),
-      linear-gradient(45deg, transparent 75%, #3B82F6 75.99%),
-      linear-gradient(-45deg, #3B82F6 40%, transparent 40.99%),
-      linear-gradient(
-        45deg,
-        #3B82F6 30%,
-        white 30.99%,
-        white 40%,
-        transparent 40.99%
-      ),
-      linear-gradient(-45deg, white 50%, #3B82F6 50.99%);
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cibaduyut-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cibaduyut-brown-300);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cibaduyut-brown-500);
+}
+
+/* Base Styles */
+body {
+  background-color: var(--cibaduyut-warm-white);
+  color: var(--cibaduyut-dark);
+}
+
+/* Transition Utilities */
+.transition-smooth {
+  @apply transition-all duration-300 ease-out;
+}
+
+.transition-fast {
+  @apply transition-all duration-150 ease-out;
+}
+
+/* Hover Effects */
+.hover-lift {
+  @apply transition-smooth hover:-translate-y-1 hover:shadow-leather-lg;
+}
+
+.hover-scale {
+  @apply transition-smooth hover:scale-105;
+}
+
+.hover-glow {
+  @apply transition-smooth hover:shadow-leather;
+}
+
+/* Glass Morphism Cards */
+.glass-card {
+  @apply bg-white/80 backdrop-blur-md border border-cibaduyut-brown-100 rounded-xl shadow-leather;
+}
+
+.glass-card-hover {
+  @apply glass-card hover:bg-white hover:shadow-leather-lg transition-smooth;
+}
+
+/* Button Styles */
+.btn-cibaduyut {
+  @apply bg-cibaduyut-brown-600 text-white px-6 py-3 rounded-lg font-medium
+         transition-smooth hover:bg-cibaduyut-brown-700 hover:shadow-leather
+         active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-cibaduyut-outline {
+  @apply border-2 border-cibaduyut-brown-600 text-cibaduyut-brown-600 px-6 py-3 rounded-lg font-medium
+         transition-smooth hover:bg-cibaduyut-brown-600 hover:text-white
+         active:scale-95;
+}
+
+.btn-cibaduyut-gold {
+  @apply bg-cibaduyut-gold text-cibaduyut-dark px-6 py-3 rounded-lg font-medium
+         transition-smooth hover:bg-cibaduyut-brown-300 hover:shadow-leather
+         active:scale-95;
+}
+
+/* Card Styles */
+.card-product {
+  @apply bg-white rounded-2xl overflow-hidden shadow-leather transition-smooth
+         hover:shadow-leather-hover hover:-translate-y-2;
+}
+
+.card-product img {
+  @apply transition-smooth;
+}
+
+.card-product:hover img {
+  @apply scale-110;
+}
+
+/* Input Styles */
+.input-cibaduyut {
+  @apply w-full px-4 py-3 rounded-lg border border-cibaduyut-brown-200
+         bg-white/50 backdrop-blur-sm
+         focus:outline-none focus:ring-2 focus:ring-cibaduyut-brown-400 focus:border-transparent
+         transition-smooth placeholder:text-cibaduyut-brown-300;
+}
+
+/* Navbar Styles */
+.navbar-sticky {
+  @apply sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-cibaduyut-brown-100;
+}
+
+/* Sidebar Styles */
+.sidebar-item {
+  @apply flex items-center gap-x-3 px-5 py-4 text-white/90
+         transition-smooth hover:bg-white/10 hover:text-white
+         border-l-4 border-transparent hover:border-cibaduyut-gold;
+}
+
+.sidebar-item.active {
+  @apply bg-white/10 text-white border-l-4 border-cibaduyut-gold;
+}
+
+/* Badge Styles */
+.badge-leather {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+         bg-cibaduyut-brown-100 text-cibaduyut-brown-700;
+}
+
+/* Section Divider */
+.section-divider {
+  @apply w-24 h-1 bg-gradient-to-r from-cibaduyut-brown-500 to-cibaduyut-gold rounded-full mx-auto;
+}
+
+/* Text Gradient */
+.text-gradient {
+  @apply bg-gradient-to-r from-cibaduyut-brown-600 to-cibaduyut-gold bg-clip-text text-transparent;
+}
+
+/* Animation Classes */
+.animate-on-scroll {
+  @apply opacity-0 translate-y-8;
+}
+
+.animate-on-scroll.visible {
+  @apply opacity-100 translate-y-0 transition-all duration-700 ease-out;
+}
+
+/* DaisyUI Overrides */
+.range {
+  --range-shdw: #8B5A2B;
+}
+
+.checkbox:checked,
+.checkbox[checked="true"],
+.checkbox[aria-checked="true"] {
+  background-repeat: no-repeat;
+  animation: checkmark var(--animation-input, 0.2s) ease-out;
+  background-color: #8B5A2B;
+  background-image: linear-gradient(-45deg, transparent 65%, #8B5A2B 65.99%),
+    linear-gradient(45deg, transparent 75%, #8B5A2B 75.99%),
+    linear-gradient(-45deg, #8B5A2B 40%, transparent 40.99%),
+    linear-gradient(
+      45deg,
+      #8B5A2B 30%,
+      white 30.99%,
+      white 40%,
+      transparent 40.99%
+    ),
+    linear-gradient(-45deg, white 50%, #8B5A2B 50.99%);
+}
+
+/* Loading Skeleton */
+.skeleton-leather {
+  @apply animate-pulse bg-gradient-to-r from-cibaduyut-brown-100 via-cibaduyut-brown-50 to-cibaduyut-brown-100;
+  background-size: 200% 100%;
+}
+
+/* Floating Label Input */
+.floating-label {
+  @apply relative;
+}
+
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label {
+  @apply -top-2 left-3 text-xs bg-white px-1;
+}
+
+.floating-label label {
+  @apply absolute left-4 top-3 text-cibaduyut-brown-400 transition-all duration-200 pointer-events-none;
+}
+
+/* Stats Card */
+.stats-card {
+  @apply bg-gradient-to-br from-white to-cibaduyut-brown-50 rounded-2xl p-6
+         border border-cibaduyut-brown-100 shadow-leather transition-smooth
+         hover:shadow-leather-lg;
+}
+
+/* Table Styles for Admin */
+.table-leather {
+  @apply w-full;
+}
+
+.table-leather thead {
+  @apply bg-cibaduyut-brown-50;
+}
+
+.table-leather th {
+  @apply px-6 py-4 text-left text-sm font-semibold text-cibaduyut-brown-700 uppercase tracking-wider;
+}
+
+.table-leather td {
+  @apply px-6 py-4 text-sm text-cibaduyut-dark border-b border-cibaduyut-brown-100;
+}
+
+.table-leather tbody tr {
+  @apply transition-smooth hover:bg-cibaduyut-brown-50/50;
+}
+
+/* Premium Badge */
+.badge-premium {
+  @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold
+         bg-gradient-to-r from-cibaduyut-gold to-cibaduyut-brown-300 text-cibaduyut-dark;
 }

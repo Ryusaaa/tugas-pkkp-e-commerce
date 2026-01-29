@@ -1,26 +1,39 @@
 import Link from 'next/link'
+import { FaHome, FaHeadset } from 'react-icons/fa'
  
 export default function NotFound() {
   return (
-    <>
-      <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
-        <div className="text-center">
-          <p className="text-lg font-semibold bg-blue-500  text-white border border-1 border-black py-2 rounded-full w-16 mx-auto">404</p>
-          <h1 className="mt-4 text-3xl font-bold tracking-tight text-black sm:text-5xl">Page not found</h1>
-          <p className="mt-6 text-base leading-7 text-black">Sorry, we couldn’t find the page you’re looking for.</p>
-          <div className="mt-10 flex items-center justify-center gap-x-6 max-[350px]:flex-col max-[350px]:gap-y-5">
-            <Link
-              href="/"
-              className="rounded-md bg-blue-500 border border-1 border-black px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:text-blue-500 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-            >
-              Go back home
-            </Link>
-            <Link href="#" className="text-sm font-semibold text-black hover:underline hover:underline-offset-4">
-              Contact support <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 flex items-center justify-center px-6">
+      <div className="text-center max-w-md">
+        {/* 404 Badge */}
+        <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-amber-100 to-amber-50 rounded-full flex items-center justify-center border-4 border-amber-200">
+          <span className="text-3xl font-bold text-amber-700">404</span>
         </div>
-      </main>
-    </>
+        
+        <h1 className="text-3xl font-bold text-gray-800 mb-3">
+          Halaman Tidak Ditemukan
+        </h1>
+        <p className="text-gray-500 mb-8">
+          Maaf, halaman yang Anda cari tidak tersedia atau telah dipindahkan.
+        </p>
+        
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition-colors"
+          >
+            <FaHome />
+            <span>Kembali ke Beranda</span>
+          </Link>
+          <Link 
+            href="#" 
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-amber-600 font-medium transition-colors"
+          >
+            <FaHeadset />
+            <span>Hubungi Kami</span>
+          </Link>
+        </div>
+      </div>
+    </div>
   )
 }

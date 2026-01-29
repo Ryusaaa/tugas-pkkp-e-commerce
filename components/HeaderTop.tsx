@@ -1,11 +1,7 @@
 // *********************
-// Role of the component: Topbar of the header
+// Role of the component: Topbar of the header - Cibaduyut Authentic Leather
 // Name of the component: HeaderTop.tsx
-// Developer: Aleksandar Kuzmanovic
-// Version: 1.0
-// Component call: <HeaderTop />
-// Input parameters: no input parameters
-// Output: topbar with phone, email and login and register links
+// Version: 2.0 - Modern Minimalist Design
 // *********************
 
 "use client";
@@ -13,10 +9,8 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import toast from "react-hot-toast";
-import { FaHeadphones } from "react-icons/fa6";
-import { FaRegEnvelope } from "react-icons/fa6";
-import { FaLocationDot } from "react-icons/fa6";
-import { FaRegUser } from "react-icons/fa6";
+import { FaPhoneAlt } from "react-icons/fa";
+import { FaEnvelope, FaMapMarkerAlt, FaUser, FaSignOutAlt } from "react-icons/fa";
 
 const HeaderTop = () => {
   const { data: session }: any = useSession();
@@ -25,45 +19,67 @@ const HeaderTop = () => {
     setTimeout(() => signOut(), 1000);
     toast.success("Logout successful!");
   }
+  
   return (
-    <div className="h-10 text-white bg-blue-500 max-lg:px-5 max-lg:h-16 max-[573px]:px-0">
-      <div className="flex justify-between h-full max-lg:flex-col max-lg:justify-center max-lg:items-center max-w-screen-2xl mx-auto px-12 max-[573px]:px-0">
-        <ul className="flex items-center h-full gap-x-5 max-[370px]:text-sm max-[370px]:gap-x-2">
-          <li className="flex items-center gap-x-2 font-semibold">
-            <FaHeadphones className="text-white" />
-            <span>+381 61 123 321</span>
-          </li>
-          <li className="flex items-center gap-x-2 font-semibold">
-            <FaRegEnvelope className="text-white text-xl" />
-            <span>test@email.com</span>
-          </li>
-        </ul>
-        <ul className="flex items-center gap-x-5 h-full max-[370px]:text-sm max-[370px]:gap-x-2 font-semibold">
-          {!session ? ( 
-          <>
-          <li className="flex items-center">
-            <Link href="/login" className="flex items-center gap-x-2 font-semibold">
-              <FaRegUser className="text-white" />
-              <span>Login</span>
-            </Link>
-          </li>
-          <li className="flex items-center">
-            <Link href="/register" className="flex items-center gap-x-2 font-semibold">
-              <FaRegUser className="text-white" />
-              <span>Register</span>
-            </Link>
-          </li>
-          </>
-          ) :  (<>
-          <span className="ml-10 text-base">{session.user?.email}</span>
-          <li className="flex items-center">
-            <button onClick={() => handleLogout()} className="flex items-center gap-x-2 font-semibold">
-              <FaRegUser className="text-white" />
-              <span>Log out</span>
-            </button>
-          </li>
-          </>)}
-        </ul>
+    <div className="bg-gradient-to-r from-cibaduyut-brown-800 via-cibaduyut-brown-700 to-cibaduyut-brown-800 text-white/90">
+      <div className="max-w-screen-2xl mx-auto px-6 lg:px-16">
+        <div className="flex flex-col sm:flex-row justify-between items-center py-2 gap-y-2">
+          {/* Contact Info */}
+          <ul className="flex items-center gap-x-6 text-sm">
+            <li className="flex items-center gap-x-2 hover:text-cibaduyut-gold transition-smooth">
+              <FaPhoneAlt className="text-cibaduyut-gold text-xs" />
+              <span>+62 22 1234 5678</span>
+            </li>
+            <li className="hidden md:flex items-center gap-x-2 hover:text-cibaduyut-gold transition-smooth">
+              <FaEnvelope className="text-cibaduyut-gold text-xs" />
+              <span>info@cibaduyut-leather.com</span>
+            </li>
+            <li className="hidden lg:flex items-center gap-x-2 hover:text-cibaduyut-gold transition-smooth">
+              <FaMapMarkerAlt className="text-cibaduyut-gold text-xs" />
+              <span>Cibaduyut, Bandung</span>
+            </li>
+          </ul>
+          
+          {/* Auth Links */}
+          <ul className="flex items-center gap-x-4 text-sm">
+            {!session ? ( 
+              <>
+                <li>
+                  <Link 
+                    href="/login" 
+                    className="flex items-center gap-x-2 px-4 py-1.5 rounded-full border border-white/20 hover:bg-white/10 hover:border-cibaduyut-gold transition-smooth"
+                  >
+                    <FaUser className="text-xs" />
+                    <span>Login</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/register" 
+                    className="flex items-center gap-x-2 px-4 py-1.5 rounded-full bg-cibaduyut-gold text-cibaduyut-brown-900 font-medium hover:bg-cibaduyut-brown-300 transition-smooth"
+                  >
+                    <span>Daftar</span>
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <span className="text-cibaduyut-gold font-medium truncate max-w-[150px]">
+                  {session.user?.email}
+                </span>
+                <li>
+                  <button 
+                    onClick={() => handleLogout()} 
+                    className="flex items-center gap-x-2 px-4 py-1.5 rounded-full border border-white/20 hover:bg-white/10 hover:border-red-400 hover:text-red-400 transition-smooth"
+                  >
+                    <FaSignOutAlt className="text-xs" />
+                    <span>Logout</span>
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );

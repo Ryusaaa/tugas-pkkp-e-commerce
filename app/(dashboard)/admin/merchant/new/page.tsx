@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import DashboardSidebar from "@/components/DashboardSidebar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import apiClient from "@/lib/api";
 import { toast } from "react-hot-toast";
+import { FaArrowLeft, FaStore, FaSave } from "react-icons/fa";
 
 export default function NewMerchantPage() {
   const [formData, setFormData] = useState({
@@ -31,7 +31,7 @@ export default function NewMerchantPage() {
     e.preventDefault();
     
     if (!formData.name.trim()) {
-      toast.error("Merchant name is required");
+      toast.error("Nama merchant wajib diisi");
       return;
     }
     
@@ -49,111 +49,157 @@ export default function NewMerchantPage() {
       }
 
       const data = await response.json();
-      toast.success("Merchant created successfully");
+      toast.success("Merchant berhasil dibuat");
       router.push(`/admin/merchant/${data.id}`);
     } catch (error) {
       console.error("Error creating merchant:", error);
-      toast.error("Failed to create merchant");
+      toast.error("Gagal membuat merchant");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="flex h-screen">
-      <DashboardSidebar />
-      <div className="flex-1 p-10 overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Add New Merchant</h1>
-          <Link
-            href="/admin/merchant"
-            className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition"
-          >
-            Cancel
-          </Link>
+    <div className="p-6 lg:p-8 bg-gray-50 min-h-screen">
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Link 
+              href="/admin/merchant"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-cibaduyut-brown-600 hover:border-cibaduyut-gold transition-all"
+            >
+              <FaArrowLeft />
+            </Link>
+            <div>
+              <h1 className="font-display text-2xl font-bold text-cibaduyut-brown-800">
+                Tambah Merchant
+              </h1>
+              <p className="text-sm text-cibaduyut-brown-500">
+                Daftarkan mitra atau toko baru
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Merchant name"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="email@example.com"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">Phone</label>
-              <input
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Phone number"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">Status</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-              >
-                <option value="ACTIVE">Active</option>
-                <option value="INACTIVE">Inactive</option>
-              </select>
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-gray-700 font-medium mb-2">Address</label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Merchant address"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-gray-700 font-medium mb-2">Description</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300 h-32"
-                placeholder="Enter merchant description"
-              ></textarea>
-            </div>
-            <div className="md:col-span-2">
-              <button 
-                type="submit" 
-                disabled={isSubmitting}
-                className={`bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition ${
-                  isSubmitting ? "opacity-70 cursor-not-allowed" : ""
-                }`}
-              >
-                {isSubmitting ? "Creating..." : "Create Merchant"}
-              </button>
-            </div>
-          </form>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="p-8">
+             <div className="flex items-center gap-3 mb-6 pb-4 border-b">
+                <div className="w-10 h-10 rounded-lg bg-cibaduyut-brown-100 text-cibaduyut-brown-600 flex items-center justify-center">
+                   <FaStore />
+                </div>
+                <h2 className="text-lg font-semibold text-gray-800">Data Merchant</h2>
+             </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="form-control w-full">
+                  <label className="label">
+                    <span className="label-text font-medium text-gray-700">Nama Merchant <span className="text-red-500">*</span></span>
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className="input input-bordered w-full focus:ring-2 focus:ring-cibaduyut-gold/50 focus:border-cibaduyut-gold"
+                    placeholder="Contoh: Toko Kulit Sejahtera"
+                  />
+                </div>
+
+                <div className="form-control w-full">
+                  <label className="label">
+                    <span className="label-text font-medium text-gray-700">Email</span>
+                  </label>
+                  <input
+                     type="email"
+                     name="email"
+                     value={formData.email}
+                     onChange={handleInputChange}
+                     className="input input-bordered w-full focus:ring-2 focus:ring-cibaduyut-gold/50 focus:border-cibaduyut-gold"
+                     placeholder="email@toko.com"
+                  />
+                </div>
+                
+                <div className="form-control w-full">
+                  <label className="label">
+                    <span className="label-text font-medium text-gray-700">No. Telepon</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="input input-bordered w-full focus:ring-2 focus:ring-cibaduyut-gold/50 focus:border-cibaduyut-gold"
+                    placeholder="0812..."
+                  />
+                </div>
+
+                <div className="form-control w-full">
+                  <label className="label">
+                    <span className="label-text font-medium text-gray-700">Status</span>
+                  </label>
+                  <select
+                    name="status"
+                    value={formData.status}
+                    onChange={handleInputChange}
+                    className="select select-bordered w-full focus:ring-2 focus:ring-cibaduyut-gold/50 focus:border-cibaduyut-gold"
+                  >
+                    <option value="ACTIVE">Aktif (Active)</option>
+                    <option value="INACTIVE">Non-Aktif (Inactive)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-control w-full">
+                  <label className="label">
+                    <span className="label-text font-medium text-gray-700">Alamat Lengkap</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    className="input input-bordered w-full focus:ring-2 focus:ring-cibaduyut-gold/50 focus:border-cibaduyut-gold"
+                    placeholder="Jl. Cibaduyut Raya No..."
+                  />
+              </div>
+
+              <div className="form-control w-full">
+                  <label className="label">
+                    <span className="label-text font-medium text-gray-700">Deskripsi Toko</span>
+                  </label>
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    className="textarea textarea-bordered h-32 focus:ring-2 focus:ring-cibaduyut-gold/50 focus:border-cibaduyut-gold"
+                    placeholder="Deskripsi singkat tentang merchant ini..."
+                  ></textarea>
+              </div>
+
+              <div className="pt-4 flex justify-end gap-3 border-t">
+                  <Link 
+                    href="/admin/merchant"
+                    className="px-6 py-2.5 rounded-xl border border-gray-300 text-gray-600 font-medium hover:bg-gray-50 transition-colors"
+                  >
+                    Batal
+                  </Link>
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className={`px-8 py-2.5 rounded-xl bg-cibaduyut-gold hover:bg-amber-600 text-white font-bold shadow-sm transition-all flex items-center gap-2 ${
+                      isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:shadow-md"
+                    }`}
+                  >
+                    {isSubmitting ? "Menyimpan..." : (
+                       <><FaSave /> Simpan Merchant</>
+                    )}
+                  </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

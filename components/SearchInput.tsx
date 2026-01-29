@@ -1,42 +1,61 @@
 // *********************
-// Role of the component: Search input element located in the header but it can be used anywhere in your application
+// Role of the component: Search input - Cibaduyut Authentic Leather
 // Name of the component: SearchInput.tsx
-// Developer: Aleksandar Kuzmanovic
-// Version: 1.0
-// Component call: <SearchInput />
-// Input parameters: no input parameters
-// Output: form with search input and button
+// Version: 2.0 - Modern Minimalist Design
 // *********************
 
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { FaSearch } from "react-icons/fa";
 import { sanitize } from "@/lib/sanitize";
 
 const SearchInput = () => {
   const [searchInput, setSearchInput] = useState<string>("");
+  const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
 
-  // function for modifying URL for searching products
   const searchProducts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Sanitize the search input before using it in URL
     const sanitizedSearch = sanitize(searchInput);
     router.push(`/search?search=${encodeURIComponent(sanitizedSearch)}`);
     setSearchInput("");
   };
 
   return (
-    <form className="flex w-full justify-center" onSubmit={searchProducts}>
-      <input
-        type="text"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        placeholder="Type here"
-        className="bg-gray-50 input input-bordered w-[70%] rounded-r-none outline-none focus:outline-none max-sm:w-full"
-      />
-      <button type="submit" className="btn bg-blue-500 text-white rounded-l-none rounded-r-xl hover:bg-blue-600">
-        Search
+    <form 
+      className={`flex w-full max-w-xl relative transition-all duration-300 ${
+        isFocused ? 'scale-[1.02]' : ''
+      }`} 
+      onSubmit={searchProducts}
+    >
+      <div className="relative flex-1">
+        <FaSearch className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${
+          isFocused ? 'text-cibaduyut-brown-500' : 'text-cibaduyut-brown-300'
+        }`} />
+        <input
+          type="text"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          placeholder="Cari sepatu, sandal, tas kulit..."
+          className={`w-full pl-11 pr-4 py-3 rounded-l-xl border-2 transition-all duration-300 bg-cibaduyut-cream/50
+            ${isFocused 
+              ? 'border-cibaduyut-brown-400 bg-white shadow-leather' 
+              : 'border-cibaduyut-brown-200 hover:border-cibaduyut-brown-300'
+            }
+            focus:outline-none placeholder:text-cibaduyut-brown-300
+          `}
+        />
+      </div>
+      <button 
+        type="submit" 
+        className="px-6 py-3 bg-gradient-to-r from-cibaduyut-brown-600 to-cibaduyut-brown-700 text-white rounded-r-xl font-medium
+          hover:from-cibaduyut-brown-700 hover:to-cibaduyut-brown-800 
+          active:scale-95 transition-all duration-300 shadow-leather hover:shadow-leather-lg"
+      >
+        Cari
       </button>
     </form>
   );

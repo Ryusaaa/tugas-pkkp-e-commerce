@@ -1,30 +1,31 @@
 // *********************
-// Role of the component: Cart icon and quantity that will be located in the header
+// Role of the component: Cart icon element - Cibaduyut
 // Name of the component: CartElement.tsx
-// Developer: Aleksandar Kuzmanovic
-// Version: 1.0
-// Component call: <CartElement />
-// Input parameters: no input parameters
-// Output: Cart icon and quantity
+// Version: 2.0 - Modern Design
 // *********************
 
 "use client";
 import Link from 'next/link'
 import React from 'react'
-import { FaCartShopping } from 'react-icons/fa6'
+import { FaShoppingBag } from 'react-icons/fa'
 import { useProductStore } from "@/app/_zustand/store";
 
 const CartElement = () => {
-    const { allQuantity } = useProductStore();
+  const { allQuantity } = useProductStore();
+  
   return (
-    <div className="relative">
-            <Link href="/cart">
-              <FaCartShopping className="text-2xl text-black" />
-              <span className="block w-6 h-6 bg-blue-600 text-white rounded-full flex justify-center items-center absolute top-[-17px] right-[-22px]">
-                { allQuantity }
-              </span>
-            </Link>
-          </div>
+    <Link 
+      href="/cart" 
+      className="relative p-2 rounded-lg hover:bg-cibaduyut-brown-100 transition-smooth group"
+      aria-label="Shopping cart"
+    >
+      <FaShoppingBag className="text-xl text-cibaduyut-brown-600 group-hover:text-cibaduyut-brown-700 transition-colors" />
+      {allQuantity > 0 && (
+        <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 bg-cibaduyut-gold text-cibaduyut-brown-900 text-xs font-bold rounded-full flex justify-center items-center shadow-sm animate-scale-in">
+          {allQuantity > 99 ? '99+' : allQuantity}
+        </span>
+      )}
+    </Link>
   )
 }
 
